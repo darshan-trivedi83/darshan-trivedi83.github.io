@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Darshan Trivedi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        nav ul li a:hover,
+        nav ul li a.active {
+            background: #1e3c72;
+            color: white;
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        .page-header {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .page-header h2 {
+            color: #1e3c72;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .article-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 4px solid #1e3c72;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .article-card h3 {
+            color: #1e3c72;
+            margin-bottom: 0.75rem;
+            font-size: 1.5rem;
+        }
+        
+        .article-card .meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .article-card .excerpt {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .article-card .read-more {
+            color: #1e3c72;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .article-card .read-more:hover {
+            text-decoration: underline;
+        }
+        
+        .placeholder-content {
+            background: #e9ecef;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 8px;
+            color: #666;
+        }
+        
+        .placeholder-content h3 {
+            color: #1e3c72;
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .social-links {
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .social-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Darshan Trivedi</h1>
+            <p>Financial Analyst | Investment Research | Market Commentary</p>
+        </div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blogs.html" class="active">Blog</a></li>
+            <li><a href="market-commentary.html">Market Commentary</a></li>
+            <li><a href="research-notes.html">Research Notes</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h2>Blog</h2>
+                <p>Insights on financial markets, investment strategies, career development, and CFA journey</p>
+            </div>
+            
+            <div class="placeholder-content">
+                <h3>Blog Posts Coming Soon</h3>
+                <p>This section will feature articles on:</p>
+                <ul style="list-style: none; margin-top: 1rem; line-height: 2;">
+                    <li>📊 Financial market analysis and trends</li>
+                    <li>💼 Career development in finance</li>
+                    <li>📈 Investment strategies and portfolio management</li>
+                    <li>🎓 CFA preparation tips and insights</li>
+                    <li>🌍 Macroeconomic analysis and policy commentary</li>
+                    <li>💡 Personal finance and wealth building</li>
+                </ul>
+                <p style="margin-top: 2rem; font-style: italic;">Check back soon for regular updates!</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Darshan Trivedi. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/darshan-trivedi" target="_blank">LinkedIn</a>
+                <a href="https://github.com/darshan-trivedi83" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
