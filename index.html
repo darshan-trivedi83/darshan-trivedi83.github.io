@@ -1,246 +1,678 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darshan Trivedi | Financial Analysis & Market Commentary</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f4f4f4;
-        }
-        
-        header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            padding: 2rem 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        nav {
-            background: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        nav ul li {
-            margin: 0;
-        }
-        
-        nav ul li a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background 0.3s, color 0.3s;
-        }
-        
-        nav ul li a:hover {
-            background: #1e3c72;
-            color: white;
-        }
-        
-        main {
-            padding: 2rem 0;
-        }
-        
-        .section {
-            background: white;
-            margin-bottom: 2rem;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .section h2 {
-            color: #1e3c72;
-            margin-bottom: 1rem;
-            font-size: 2rem;
-            border-bottom: 3px solid #1e3c72;
-            padding-bottom: 0.5rem;
-        }
-        
-        .intro {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .intro h2 {
-            color: white;
-            border-bottom-color: white;
-        }
-        
-        .articles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        
-        .article-card {
-            background: #f9f9f9;
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-left: 4px solid #1e3c72;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .article-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .article-card h3 {
-            color: #1e3c72;
-            margin-bottom: 0.5rem;
-        }
-        
-        .article-card .date {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .article-card p {
-            color: #555;
-        }
-        
-        footer {
-            background: #1e3c72;
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-        
-        .social-links {
-            margin-top: 1rem;
-        }
-        
-        .social-links a {
-            color: white;
-            margin: 0 10px;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .social-links a:hover {
-            text-decoration: underline;
-        }
-        
-        .placeholder {
-            background: #e9ecef;
-            padding: 2rem;
-            text-align: center;
-            border-radius: 8px;
-            color: #666;
-            font-style: italic;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Family Habit Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --accent: #22c55e;
+      --accent-soft: rgba(34,197,94,0.15);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body { background: radial-gradient(circle at top, #1f2937 0, #020617 55%); color: var(--text); min-height: 100vh; padding: 16px; }
+    .shell { max-width: 1150px; margin: 0 auto; }
+    header { margin-bottom: 16px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; }
+    header h1 { font-size: 1.4rem; letter-spacing: 0.03em; text-transform: uppercase; color: #f9fafb; }
+    header span { font-size: 0.85rem; color: var(--muted); }
+
+    .grid { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,1.25fr); gap: 16px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: linear-gradient(145deg, rgba(15,23,42,0.95), rgba(15,23,42,0.75));
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(148,163,184,0.18);
+      box-shadow: 0 18px 45px rgba(15,23,42,0.8);
+      backdrop-filter: blur(14px);
+    }
+    .card h2 {
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+    }
+    .card small { color: var(--muted); }
+
+    .today {
+      display:flex; align-items:center; justify-content:space-between;
+      gap:8px; margin-bottom:8px; flex-wrap:wrap;
+    }
+    .today strong { font-size:0.9rem; }
+
+    input[type="date"], select, button {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.3);
+      background: #020617;
+      color: var(--text);
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    button:hover { border-color: var(--accent); }
+
+    .user-select {
+      display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;
+    }
+
+    .pill {
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:0.75rem; padding:3px 8px;
+      border-radius:999px; border:1px solid rgba(148,163,184,0.35);
+      color: var(--muted);
+    }
+    .pill-dot {
+      width:6px; height:6px; border-radius:999px; background:var(--accent);
+      box-shadow:0 0 8px rgba(34,197,94,0.7);
+    }
+
+    .habit-row {
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 6px 0; border-bottom: 1px dashed rgba(55,65,81,0.7);
+      gap:10px;
+    }
+    .habit-row:last-child { border-bottom: none; }
+    .habit-row span { font-size:0.9rem; }
+    .habit-actions { display:flex; align-items:center; gap:8px; }
+
+    .toggle-chip {
+      display:inline-flex; align-items:center; gap:6px;
+      padding: 4px 9px; border-radius:999px;
+      border:1px solid rgba(148,163,184,0.3);
+      background:#020617; cursor:pointer;
+      font-size:0.78rem; color:var(--muted);
+    }
+    .toggle-chip.active {
+      border-color: var(--accent); background: var(--accent-soft); color:#bbf7d0;
+    }
+    .toggle-dot {
+      width:9px; height:9px; border-radius:999px; background:rgba(148,163,184,0.8);
+    }
+    .toggle-chip.active .toggle-dot {
+      background:var(--accent); box-shadow:0 0 6px rgba(34,197,94,0.8);
+    }
+
+    .add-habit { margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+    .add-habit input[type="text"] {
+      flex:1; min-width:140px; border-radius:999px;
+      border:1px solid rgba(148,163,184,0.3);
+      background:#020617; color:var(--text);
+      padding:6px 10px; font-size:0.8rem;
+    }
+
+    .section-header {
+      display:flex; justify-content:space-between; align-items:center;
+      gap:10px; margin-bottom:8px; flex-wrap:wrap;
+    }
+    .section-header select {
+      border-radius:999px; border:1px solid rgba(148,163,184,0.35);
+      background:#020617; color:var(--muted);
+      padding:4px 8px; font-size:0.78rem;
+    }
+
+    canvas { width:100% !important; height:220px !important; }
+
+    .summary {
+      margin-top:6px; font-size:0.82rem; color:var(--muted);
+    }
+    .summary span.highlight {
+      color:#bbf7d0;
+    }
+
+    .footer {
+      margin-top:10px; font-size:0.75rem; color:var(--muted);
+      display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;
+    }
+    .danger { color: var(--danger); cursor:pointer; text-decoration:underline; }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Darshan Trivedi</h1>
-            <p>Financial Analyst | Investment Research | Market Commentary</p>
+<div class="shell">
+  <header>
+    <div>
+      <h1>Family Habit Tracker</h1>
+      <span>Darshan · Shachi · XYZ · ABC · (User 5)</span>
+    </div>
+    <span id="date-label"></span>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT: Inputs and today -->
+    <div class="card">
+      <h2>Habits & Today</h2>
+
+      <div class="today">
+        <div>
+          <strong id="today-label"></strong>
+          <div style="font-size:0.78rem; color:var(--muted);">
+            Select your name, tick habits for the day. Data is local to this browser.
+          </div>
         </div>
-    </header>
-    
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="blogs.html">Blog</a></li>
-            <li><a href="market-commentary.html">Market Commentary</a></li>
-            <li><a href="research-notes.html">Research Notes</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    </nav>
-    
-    <main>
-        <div class="container">
-            <section class="section intro">
-                <h2>Welcome</h2>
-                <p>Welcome to my financial analysis and market commentary website. Here you'll find in-depth analysis of financial markets, investment research, and macroeconomic insights focused on equity research, portfolio management, and economic trends.</p>
-                <p style="margin-top: 1rem;">As a CFA Level 3 candidate with experience in portfolio management and financial analysis, I share my perspectives on market dynamics, investment strategies, and economic developments.</p>
-            </section>
-            
-            <section class="section">
-                <h2>Latest Market Commentary</h2>
-                <div class="articles-grid">
-                    <div class="article-card">
-                        <h3>Market Analysis Coming Soon</h3>
-                        <p class="date">Stay tuned</p>
-                        <p>Market commentary and analysis will be published here. Topics will include equity markets, macroeconomic trends, sector analysis, and investment insights.</p>
-                    </div>
-                </div>
-            </section>
-            
-            <section class="section">
-                <h2>Recent Research Notes</h2>
-                <div class="articles-grid">
-                    <div class="article-card">
-                        <h3>Research Publications Coming Soon</h3>
-                        <p class="date">In development</p>
-                        <p>Detailed research notes on investment opportunities, company analysis, and economic research will be available here.</p>
-                    </div>
-                </div>
-            </section>
-            
-            <section class="section">
-                <h2>Featured Blog Posts</h2>
-                <div class="articles-grid">
-                    <div class="article-card">
-                        <h3>Blog Content Coming Soon</h3>
-                        <p class="date">Coming soon</p>
-                        <p>Blog posts covering financial markets, investment strategies, CFA insights, and career development in finance will be published here.</p>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-    
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Darshan Trivedi. All rights reserved.</p>
-            <div class="social-links">
-                <a href="https://www.linkedin.com/in/darshan-trivedi" target="_blank">LinkedIn</a>
-                <a href="https://github.com/darshan-trivedi83" target="_blank">GitHub</a>
-            </div>
-        </div>
-    </footer>
+        <input type="date" id="date-picker" />
+      </div>
+
+      <div class="user-select">
+        <select id="user-select">
+          <option value="Darshan">Darshan</option>
+          <option value="Shachi">Shachi</option>
+          <option value="XYZ">XYZ</option>
+          <option value="ABC">ABC</option>
+          <option value="User5">User 5</option>
+        </select>
+        <span class="pill">
+          <span class="pill-dot"></span>
+          Tracking is per person (separate habits and history).
+        </span>
+      </div>
+
+      <div id="habits-list"></div>
+
+      <div class="add-habit">
+        <input id="new-habit-name" type="text" placeholder="Add habit for this user (e.g., Sleep 7h)" />
+        <button id="add-habit-btn">Add</button>
+      </div>
+
+      <div class="footer">
+        <span class="pill">
+          <span class="pill-dot"></span>
+          Local-only data, fast offline.
+        </span>
+        <span class="danger" id="reset-data">Reset ALL users</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: Dashboards -->
+    <div class="card">
+      <div class="section-header">
+        <h2>Dashboards</h2>
+        <select id="view-select">
+          <option value="week">This week</option>
+          <option value="month">This month</option>
+          <option value="year">This year</option>
+        </select>
+      </div>
+
+      <div id="charts-week">
+        <canvas id="weekly-bar"></canvas>
+      </div>
+
+      <div id="charts-month" style="display:none;">
+        <canvas id="monthly-line"></canvas>
+      </div>
+
+      <div id="charts-year" style="display:none;">
+        <canvas id="yearly-line"></canvas>
+      </div>
+
+      <div class="summary" id="summary-text"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = "familyHabitTracker_v1";
+
+  function defaultState() {
+    return {
+      users: {
+        "Darshan": {
+          habits: [
+            { id: 1, name: "Sleep - 7 hours" },
+            { id: 2, name: "B12 + Vitamin D3 supplements" },
+            { id: 3, name: "Exercise 30 mins" },
+            { id: 4, name: "Study 1 hour" }
+          ],
+          logs: {}
+        },
+        "Shachi": { habits: [], logs: {} },
+        "XYZ": { habits: [], logs: {} },
+        "ABC": { habits: [], logs: {} },
+        "User5": { habits: [], logs: {} }
+      }
+    };
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      const parsed = JSON.parse(raw);
+      if (!parsed.users) return defaultState();
+      return parsed;
+    } catch (e) {
+      return defaultState();
+    }
+  }
+
+  let appState = loadState();
+  let selectedUser = "Darshan";
+  let selectedDate = new Date();
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    render();
+  }
+
+  function todayISO(dateObj = new Date()) {
+    return dateObj.toISOString().slice(0, 10);
+  }
+
+  function dateKey(dateObj) {
+    return todayISO(dateObj);
+  }
+
+  function weekRange(dateObj) {
+    const d = new Date(dateObj);
+    const day = d.getDay();
+    const diffToMonday = (day + 6) % 7;
+    const start = new Date(d);
+    start.setDate(d.getDate() - diffToMonday);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+    return { start, end };
+  }
+
+  function monthRange(dateObj) {
+    const d = new Date(dateObj);
+    const start = new Date(d.getFullYear(), d.getMonth(), 1);
+    const end = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+    return { start, end };
+  }
+
+  function yearRange(dateObj) {
+    const d = new Date(dateObj);
+    const start = new Date(d.getFullYear(), 0, 1);
+    const end = new Date(d.getFullYear(), 11, 31);
+    return { start, end };
+  }
+
+  const habitsListEl = document.getElementById("habits-list");
+  const datePickerEl = document.getElementById("date-picker");
+  const todayLabelEl = document.getElementById("today-label");
+  const dateLabelHeader = document.getElementById("date-label");
+  const newHabitNameEl = document.getElementById("new-habit-name");
+  const addHabitBtn = document.getElementById("add-habit-btn");
+  const userSelectEl = document.getElementById("user-select");
+  const viewSelectEl = document.getElementById("view-select");
+  const summaryTextEl = document.getElementById("summary-text");
+  const chartsWeekEl = document.getElementById("charts-week");
+  const chartsMonthEl = document.getElementById("charts-month");
+  const chartsYearEl = document.getElementById("charts-year");
+  const resetDataEl = document.getElementById("reset-data");
+
+  datePickerEl.value = todayISO(selectedDate);
+
+  let weeklyChart, monthlyChart, yearlyChart;
+
+  function currentUserObj() {
+    if (!appState.users[selectedUser]) {
+      appState.users[selectedUser] = { habits: [], logs: {} };
+    }
+    return appState.users[selectedUser];
+  }
+
+  function ensureLogKey(userObj, key) {
+    if (!userObj.logs[key]) userObj.logs[key] = {};
+    return userObj.logs[key];
+  }
+
+  function formatDateNice(d) {
+    return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+  }
+
+  function formatRange(start, end) {
+    return formatDateNice(start) + " → " + formatDateNice(end);
+  }
+
+  function toggleHabitDone(dateStr, habitId) {
+    const user = currentUserObj();
+    const log = ensureLogKey(user, dateStr);
+    log[habitId] = !log[habitId];
+    saveState();
+  }
+
+  function addHabit(name) {
+    const user = currentUserObj();
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    const maxId = user.habits.reduce((m, h) => Math.max(m, h.id), 0);
+    user.habits.push({ id: maxId + 1, name: trimmed });
+    newHabitNameEl.value = "";
+    saveState();
+  }
+
+  function deleteHabit(id) {
+    const user = currentUserObj();
+    user.habits = user.habits.filter(h => h.id !== id);
+    Object.keys(user.logs).forEach(d => {
+      if (user.logs[d] && user.logs[d][id] !== undefined) {
+        delete user.logs[d][id];
+      }
+    });
+    saveState();
+  }
+
+  function computeStats(rangeFn) {
+    const user = currentUserObj();
+    const { start, end } = rangeFn(selectedDate);
+    const statsByHabit = {};
+    user.habits.forEach(h => {
+      statsByHabit[h.id] = { name: h.name, done: 0, total: 0 };
+    });
+
+    const iter = new Date(start);
+    while (iter <= end) {
+      const key = dateKey(iter);
+      const log = user.logs[key] || {};
+      user.habits.forEach(h => {
+        statsByHabit[h.id].total += 1;
+        if (log[h.id]) statsByHabit[h.id].done += 1;
+      });
+      iter.setDate(iter.getDate() + 1);
+    }
+
+    const labels = [];
+    const data = [];
+    let totalDone = 0, totalPlanned = 0;
+    Object.values(statsByHabit).forEach(s => {
+      labels.push(s.name);
+      const pct = s.total ? Math.round((s.done / s.total) * 100) : 0;
+      data.push(pct);
+      totalDone += s.done;
+      totalPlanned += s.total;
+    });
+
+    const overallPct = totalPlanned ? Math.round((totalDone / totalPlanned) * 100) : 0;
+    return {
+      labels,
+      data,
+      overallPct,
+      rangeLabel: formatRange(start, end)
+    };
+  }
+
+  function computeMonthlyLine() {
+    const user = currentUserObj();
+    const { start, end } = monthRange(selectedDate);
+    const weeks = [];
+    const values = [];
+
+    let iter = new Date(start);
+    while (iter <= end) {
+      const weekStart = new Date(iter);
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      if (weekEnd > end) weekEnd.setTime(end.getTime());
+
+      let totalDone = 0, totalPlanned = 0;
+      const d = new Date(weekStart);
+      while (d <= weekEnd) {
+        const key = dateKey(d);
+        const log = user.logs[key] || {};
+        user.habits.forEach(h => {
+          totalPlanned += 1;
+          if (log[h.id]) totalDone += 1;
+        });
+        d.setDate(d.getDate() + 1);
+      }
+
+      const pct = totalPlanned ? Math.round((totalDone / totalPlanned) * 100) : 0;
+      weeks.push("W" + (weeks.length + 1));
+      values.push(pct);
+      iter.setDate(iter.getDate() + 7);
+    }
+
+    return { labels: weeks, data: values, rangeLabel: formatRange(start, end) };
+  }
+
+  function computeYearlyLine() {
+    const user = currentUserObj();
+    const { start, end } = yearRange(selectedDate);
+    const months = [];
+    const values = [];
+
+    for (let m = 0; m < 12; m++) {
+      const mStart = new Date(start.getFullYear(), m, 1);
+      if (mStart > end) break;
+      const mEnd = new Date(start.getFullYear(), m + 1, 0);
+
+      let totalDone = 0, totalPlanned = 0;
+      const d = new Date(mStart);
+      while (d <= mEnd && d <= end) {
+        const key = dateKey(d);
+        const log = user.logs[key] || {};
+        user.habits.forEach(h => {
+          totalPlanned += 1;
+          if (log[h.id]) totalDone += 1;
+        });
+        d.setDate(d.getDate() + 1);
+      }
+      const pct = totalPlanned ? Math.round((totalDone / totalPlanned) * 100) : 0;
+      months.push(mStart.toLocaleString(undefined, { month: "short" }));
+      values.push(pct);
+    }
+    return { labels: months, data: values, rangeLabel: start.getFullYear().toString() };
+  }
+
+  function renderHabits() {
+    const user = currentUserObj();
+    const dKey = todayISO(selectedDate);
+    const log = user.logs[dKey] || {};
+    habitsListEl.innerHTML = "";
+
+    if (!user.habits.length) {
+      const empty = document.createElement("div");
+      empty.style.fontSize = "0.8rem";
+      empty.style.color = "#9ca3af";
+      empty.textContent = "No habits yet for " + selectedUser + ". Add one below.";
+      habitsListEl.appendChild(empty);
+      return;
+    }
+
+    user.habits.forEach(habit => {
+      const row = document.createElement("div");
+      row.className = "habit-row";
+
+      const left = document.createElement("span");
+      left.textContent = habit.name;
+
+      const right = document.createElement("div");
+      right.className = "habit-actions";
+
+      const chip = document.createElement("div");
+      chip.className = "toggle-chip" + (log[habit.id] ? " active" : "");
+      chip.innerHTML = '<span class="toggle-dot"></span>' + (log[habit.id] ? "Done" : "Tap if done");
+      chip.onclick = () => toggleHabitDone(dKey, habit.id);
+
+      const del = document.createElement("span");
+      del.textContent = "✕";
+      del.style.fontSize = "0.8rem";
+      del.style.opacity = "0.65";
+      del.style.cursor = "pointer";
+      del.title = "Delete habit";
+      del.onclick = () => {
+        if (confirm("Remove this habit and its history for " + selectedUser + "?")) deleteHabit(habit.id);
+      };
+
+      right.appendChild(chip);
+      right.appendChild(del);
+      row.appendChild(left);
+      row.appendChild(right);
+      habitsListEl.appendChild(row);
+    });
+  }
+
+  function renderCharts() {
+    const view = viewSelectEl.value;
+
+    chartsWeekEl.style.display = view === "week" ? "block" : "none";
+    chartsMonthEl.style.display = view === "month" ? "block" : "none";
+    chartsYearEl.style.display = view === "year" ? "block" : "none";
+
+    if (view === "week") {
+      const stats = computeStats(weekRange);
+      const ctx = document.getElementById("weekly-bar").getContext("2d");
+      if (weeklyChart) weeklyChart.destroy();
+      weeklyChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: stats.labels,
+          datasets: [{
+            label: "% days done (week)",
+            data: stats.data,
+            backgroundColor: "rgba(34,197,94,0.35)",
+            borderColor: "#22c55e",
+            borderWidth: 1.4,
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: c => c.parsed.y + "% completed" } }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: { stepSize: 25, color: "#9ca3af" },
+              grid: { color: "rgba(55,65,81,0.6)" }
+            },
+            x: {
+              ticks: { color: "#9ca3af" },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+      summaryTextEl.innerHTML =
+        `${selectedUser}: Week <span class="highlight">${stats.rangeLabel}</span> — ` +
+        `${stats.overallPct}% of planned habit-days completed.`;
+    }
+
+    if (view === "month") {
+      const stats = computeMonthlyLine();
+      const ctx = document.getElementById("monthly-line").getContext("2d");
+      if (monthlyChart) monthlyChart.destroy();
+      monthlyChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: stats.labels,
+          datasets: [{
+            label: "Weekly completion %",
+            data: stats.data,
+            borderColor: "#22c55e",
+            backgroundColor: "rgba(34,197,94,0.25)",
+            tension: 0.35,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: { stepSize: 25, color: "#9ca3af" },
+              grid: { color: "rgba(55,65,81,0.6)" }
+            },
+            x: {
+              ticks: { color: "#9ca3af" },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+      summaryTextEl.innerHTML =
+        `${selectedUser}: Month <span class="highlight">${stats.rangeLabel}</span> — weekly consistency trend.`;
+    }
+
+    if (view === "year") {
+      const stats = computeYearlyLine();
+      const ctx = document.getElementById("yearly-line").getContext("2d");
+      if (yearlyChart) yearlyChart.destroy();
+      yearlyChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: stats.labels,
+          datasets: [{
+            label: "Monthly completion %",
+            data: stats.data,
+            borderColor: "#22c55e",
+            backgroundColor: "rgba(34,197,94,0.25)",
+            tension: 0.3,
+            fill: true,
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: { stepSize: 25, color: "#9ca3af" },
+              grid: { color: "rgba(55,65,81,0.6)" }
+            },
+            x: {
+              ticks: { color: "#9ca3af" },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+      summaryTextEl.innerHTML =
+        `${selectedUser}: Year <span class="highlight">${stats.rangeLabel}</span> — each point is one month’s overall %.`;
+    }
+  }
+
+  function render() {
+    const today = new Date();
+    todayLabelEl.textContent = selectedDate.toDateString();
+    dateLabelHeader.textContent = "Today: " + today.toDateString() + " · User: " + selectedUser;
+    userSelectEl.value = selectedUser;
+    renderHabits();
+    renderCharts();
+  }
+
+  datePickerEl.addEventListener("change", e => {
+    selectedDate = new Date(e.target.value);
+    render();
+  });
+
+  addHabitBtn.addEventListener("click", () => addHabit(newHabitNameEl.value));
+  newHabitNameEl.addEventListener("keypress", e => {
+    if (e.key === "Enter") addHabit(newHabitNameEl.value);
+  });
+
+  userSelectEl.addEventListener("change", e => {
+    selectedUser = e.target.value;
+    render();
+  });
+
+  viewSelectEl.addEventListener("change", renderCharts);
+
+  resetDataEl.addEventListener("click", () => {
+    if (confirm("Reset ALL users' habits and history? This cannot be undone.")) {
+      appState = defaultState();
+      saveState();
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    render();
+  });
+</script>
 </body>
 </html>
