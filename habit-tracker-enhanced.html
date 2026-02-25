@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Family Habit Tracker</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0f172a;--card:#111827;--accent:#22c55e;--a2:#3b82f6;--a3:#f59e0b;--a4:#ec4899;--a5:#8b5cf6;
+--as:rgba(34,197,94,0.15);--text:#e5e7eb;--muted:#9ca3af;--danger:#f97373;--bd:rgba(148,163,184,0.18);--ibg:#020617;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif;}
+body{background:radial-gradient(circle at top,#1e293b 0,#020617 60%);color:var(--text);min-height:100vh;padding:14px;}
+.shell{max-width:1280px;margin:0 auto;}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--bd);}
+.logo{font-size:1.35rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#f9fafb;}
+.logo span{color:var(--accent);}
+.sub{font-size:.78rem;color:var(--muted);margin-top:2px;}
+.topbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+input[type=date]{border-radius:999px;border:1px solid var(--bd);background:var(--ibg);color:var(--text);padding:5px 12px;font-size:.8rem;cursor:pointer;}
+.btn{display:inline-flex;align-items:center;gap:5px;border-radius:999px;border:1px solid var(--bd);background:var(--ibg);color:var(--text);padding:6px 13px;font-size:.78rem;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn:hover{border-color:var(--accent);background:rgba(34,197,94,.08);}
+.btn-g{border-color:var(--accent);background:var(--as);color:#bbf7d0;}
+.btn-b{border-color:var(--a2);background:rgba(59,130,246,.1);color:#93c5fd;}
+.btn-r{border-color:var(--danger);color:var(--danger);}
+.btn-r:hover{background:rgba(249,115,115,.1);}
+.layout{display:grid;grid-template-columns:300px 1fr;gap:14px;}
+@media(max-width:900px){.layout{grid-template-columns:1fr;}}
+.card{background:linear-gradient(145deg,rgba(15,23,42,.97),rgba(15,23,42,.78));border-radius:15px;padding:14px;border:1px solid var(--bd);box-shadow:0 16px 40px rgba(0,0,0,.6);backdrop-filter:blur(12px);}
+.ct{font-size:.75rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.member-list{display:flex;flex-direction:column;gap:3px;}
+.mi{display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:10px;border:1px solid transparent;cursor:pointer;transition:all .2s;}
+.mi:hover{background:rgba(255,255,255,.04);border-color:var(--bd);}
+.mi.active{background:var(--as);border-color:var(--accent);}
+.av{width:33px;height:33px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;}
+.mn{font-size:.86rem;font-weight:600;}
+.ms{font-size:.7rem;color:var(--muted);}
+.ma{display:flex;gap:3px;margin-left:auto;opacity:0;transition:opacity .2s;}
+.mi:hover .ma{opacity:1;}
+.ib{background:none;border:none;color:var(--muted);cursor:pointer;padding:3px 4px;border-radius:5px;font-size:.8rem;}
+.ib:hover{color:var(--text);background:rgba(255,255,255,.08);}
+.add-row{display:flex;gap:6px;margin-top:8px;}
+.ifield{flex:1;border-radius:999px;border:1px solid var(--bd);background:var(--ibg);color:var(--text);padding:6px 12px;font-size:.8rem;outline:none;min-width:0;}
+.ifield:focus{border-color:var(--accent);}
+.habit-list{display:flex;flex-direction:column;gap:5px;}
+.hr{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;border:1px solid var(--bd);background:rgba(255,255,255,.02);transition:all .2s;}
+.hr:hover{background:rgba(255,255,255,.05);}
+.hchk{width:21px;height:21px;border-radius:6px;border:2px solid var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.hchk.done{border-color:var(--accent);background:var(--accent);}
+.hchk.done::after{content:"✓";color:#000;font-size:.72rem;font-weight:800;}
+.hname{flex:1;font-size:.86rem;}
+.streak{font-size:.68rem;padding:2px 6px;border-radius:999px;border:1px solid rgba(245,158,11,.4);background:rgba(245,158,11,.1);color:#fcd34d;white-space:nowrap;}
+.ha{display:flex;gap:3px;opacity:0;transition:opacity .2s;}
+.hr:hover .ha{opacity:1;}
+.prog-wrap{background:rgba(55,65,81,.5);border-radius:999px;height:3px;margin-top:3px;overflow:hidden;}
+.prog{height:3px;border-radius:999px;background:var(--accent);transition:width .5s;}
+.tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;}
+.tab{padding:6px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--ibg);color:var(--muted);font-size:.78rem;cursor:pointer;transition:all .2s;}
+.tab.on{border-color:var(--accent);background:var(--as);color:#bbf7d0;}
+.stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.sc{flex:1;min-width:90px;background:rgba(255,255,255,.03);border:1px solid var(--bd);border-radius:10px;padding:9px 11px;}
+.sv{font-size:1.25rem;font-weight:800;color:#f9fafb;}
+.sl{font-size:.7rem;color:var(--muted);margin-top:1px;}
+.ch-wrap{position:relative;}
+.ch-wrap canvas{width:100%!important;}
+.fchips{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;}
+.fc{padding:3px 9px;border-radius:999px;border:1px solid var(--bd);background:none;color:var(--muted);font-size:.73rem;cursor:pointer;transition:all .2s;}
+.fc.on{border-color:var(--accent);background:var(--as);color:#bbf7d0;}
+.heat-legend{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.heat-legend span{font-size:.7rem;color:var(--muted);}
+.heat-swatch{width:14px;height:14px;border-radius:3px;}
+.heat-outer{overflow-x:auto;padding-bottom:4px;}
+.heat-month-label{font-size:.68rem;color:var(--muted);margin-bottom:3px;display:flex;gap:2px;}
+.heat-row{display:flex;gap:2px;margin-bottom:2px;}
+.heat-day-label{font-size:.62rem;color:var(--muted);width:18px;text-align:right;padding-right:3px;line-height:14px;flex-shrink:0;}
+.hc{width:13px;height:13px;border-radius:2px;flex-shrink:0;cursor:default;transition:opacity .15s;position:relative;}
+.hc:hover{opacity:.7;}
+.empty-st{text-align:center;padding:24px;color:var(--muted);font-size:.85rem;}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:200;}
+.modal{background:#0f172a;border:1px solid var(--bd);border-radius:15px;padding:20px;width:min(420px,94vw);box-shadow:0 24px 60px rgba(0,0,0,.8);}
+.modal h3{font-size:.95rem;margin-bottom:12px;color:#f9fafb;}
+.mfooter{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
+.lbl{font-size:.78rem;color:var(--muted);margin-bottom:4px;display:block;}
+.hi{display:none!important;}
+.hl{color:#bbf7d0;}
+.notice{font-size:.75rem;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;line-height:1.5;margin-top:10px;}
+.divider{border:none;border-top:1px solid var(--bd);margin:10px 0;}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;padding:2px 8px;border-radius:999px;border:1px solid var(--bd);color:var(--muted);}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px rgba(34,197,94,.7);}
+</style>
+</head>
+<body>
+<div class="shell">
+<header>
+  <div>
+    <div class="logo">&#127775; Family <span>Habit</span> Tracker</div>
+    <div class="sub">Dynamic members &bull; Streaks &bull; 5 chart views &bull; Export/Import &bull; 100% local</div>
+  </div>
+  <div class="topbar">
+    <input type="date" id="dp"/>
+    <button class="btn btn-b" id="exp-btn">&#8659; Export</button>
+    <button class="btn" id="imp-btn">&#8657; Import</button>
+    <input type="file" id="imp-file" accept=".json" class="hi"/>
+    <button class="btn btn-r" id="resetall-btn">&#9003; Reset All</button>
+  </div>
+</header>
+<div class="layout">
+  <div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="ct">Family Members
+        <button class="btn btn-g" id="add-member-btn" style="padding:4px 10px;font-size:.73rem">+ Member</button>
+      </div>
+      <div class="member-list" id="mlist"></div>
+      <div class="notice"><span class="chip"><span class="dot"></span>Local only</span>&nbsp; Each person picks their name, adds habits, ticks daily. Share the link so others can open it on their device.</div>
+    </div>
+    <div class="card" id="hcard">
+      <div class="ct" id="hcard-title">Habits
+        <button class="btn btn-g" id="add-habit-btn" style="padding:4px 10px;font-size:.73rem">+ Habit</button>
+      </div>
+      <div id="hlist-wrap"><div class="empty-st">&#128100; Select a member</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-t="today">Today</button>
+      <button class="tab" data-t="week">Week</button>
+      <button class="tab" data-t="month">Month</button>
+      <button class="tab" data-t="year">Year</button>
+      <button class="tab" data-t="heat">Heatmap</button>
+    </div>
+    <div id="pane-today">
+      <div class="stats-row" id="today-stats"></div>
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px">Today's completion per habit (doughnut) &amp; last 14 days trend (line)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="ch-wrap"><canvas id="ch-donut" height="200"></canvas></div>
+        <div class="ch-wrap"><canvas id="ch-trend" height="200"></canvas></div>
+      </div>
+    </div>
+    <div id="pane-week" class="hi">
+      <div class="stats-row" id="week-stats"></div>
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px">Stacked bars — each colour is one habit. Hover for details.</div>
+      <div class="ch-wrap"><canvas id="ch-week" height="240"></canvas></div>
+    </div>
+    <div id="pane-month" class="hi">
+      <div class="stats-row" id="month-stats"></div>
+      <div class="fchips" id="month-filter"></div>
+      <div class="ch-wrap"><canvas id="ch-month" height="240"></canvas></div>
+    </div>
+    <div id="pane-year" class="hi">
+      <div class="stats-row" id="year-stats"></div>
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px">Monthly completion % over the year</div>
+      <div class="ch-wrap"><canvas id="ch-year" height="240"></canvas></div>
+    </div>
+    <div id="pane-heat" class="hi">
+      <div class="stats-row" id="heat-stats"></div>
+      <div class="fchips" id="heat-filter"></div>
+      <div class="heat-outer" id="heat-grid"></div>
+      <div class="heat-legend">
+        <span>Less</span>
+        <div class="heat-swatch" style="background:#1e2a1e"></div>
+        <div class="heat-swatch" style="background:#166534"></div>
+        <div class="heat-swatch" style="background:#16a34a"></div>
+        <div class="heat-swatch" style="background:#22c55e"></div>
+        <div class="heat-swatch" style="background:#86efac"></div>
+        <span>More</span>
+        <span id="heat-tip" style="margin-left:10px;font-size:.72rem"></span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- Modals -->
+<div class="modal-ov hi" id="m-member">
+  <div class="modal">
+    <h3 id="mm-title">Add Member</h3>
+    <label class="lbl">Name</label>
+    <input class="ifield" id="mm-name" style="border-radius:8px;width:100%" placeholder="e.g. Darshan"/>
+    <div class="mfooter">
+      <button class="btn" id="mm-cancel">Cancel</button>
+      <button class="btn btn-g" id="mm-save">Save</button>
+    </div>
+  </div>
+</div>
+<div class="modal-ov hi" id="m-habit">
+  <div class="modal">
+    <h3 id="mh-title">Add Habit</h3>
+    <label class="lbl">Habit name</label>
+    <input class="ifield" id="mh-name" style="border-radius:8px;width:100%" placeholder="e.g. Sleep 7h, Gym 30m"/>
+    <div class="mfooter">
+      <button class="btn" id="mh-cancel">Cancel</button>
+      <button class="btn btn-g" id="mh-save">Save</button>
+    </div>
+  </div>
+</div>
+<div class="modal-ov hi" id="m-confirm">
+  <div class="modal">
+    <h3 id="mc-title">Confirm</h3>
+    <p id="mc-msg" style="font-size:.84rem;color:var(--muted)"></p>
+    <div class="mfooter">
+      <button class="btn" id="mc-cancel">Cancel</button>
+      <button class="btn btn-r" id="mc-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+<script>
+const KEY='fht_v2';
+const COLORS=['#22c55e','#3b82f6','#f59e0b','#ec4899','#8b5cf6','#06b6d4','#f97316','#84cc16','#14b8a6','#a855f7'];
+const AVATARBG=['#166534','#1e40af','#92400e','#9d174d','#4c1d95','#164e63','#7c2d12','#3f6212','#134e4a','#581c87'];
+
+function loadState(){
+  try{const r=localStorage.getItem(KEY);if(!r)return def();const p=JSON.parse(r);return p.members?p:def();}catch{return def();}
+}
+function def(){
+  return{members:[
+    {id:'m1',name:'Darshan',color:0},
+    {id:'m2',name:'Shachi',color:1},
+    {id:'m3',name:'XYZ',color:2},
+    {id:'m4',name:'ABC',color:3}
+  ],
+  habits:{
+    m1:[{id:'h1',name:'Sleep 7 hours'},{id:'h2',name:'B12 + Vitamin D3 supplements'},{id:'h3',name:'Exercise 30 mins'},{id:'h4',name:'Study 1 hour'}],
+    m2:[],m3:[],m4:[]
+  },
+  logs:{}};
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+function iso(d=new Date()){return d.toISOString().slice(0,10);}
+function addDays(d,n){const r=new Date(d);r.setDate(r.getDate()+n);return r;}
+function weekStart(d){const r=new Date(d);const day=r.getDay();r.setDate(r.getDate()-((day+6)%7));return r;}
+function monthStart(d){return new Date(d.getFullYear(),d.getMonth(),1);}
+function monthEnd(d){return new Date(d.getFullYear(),d.getMonth()+1,0);}
+function yearStart(d){return new Date(d.getFullYear(),0,1);}
+function fmtDate(d){return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});}
+function fmtDateFull(d){return d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});}
+function uid(){return 'm'+Date.now()+Math.random().toString(36).slice(2,6);}
+function huid(){return 'h'+Date.now()+Math.random().toString(36).slice(2,6);}
+function getMemberHabits(mid){return state.habits[mid]||[];}
+function getLog(mid,date){return(state.logs[mid]&&state.logs[mid][date])||{};}
+function isDone(mid,date,hid){return!!(getLog(mid,date)[hid]);}
+function setDone(mid,date,hid,val){
+  if(!state.logs[mid])state.logs[mid]={};
+  if(!state.logs[mid][date])state.logs[mid][date]={};
+  state.logs[mid][date][hid]=val;
+  save();render();
+}
+function completionPct(mid,date){
+  const h=getMemberHabits(mid);if(!h.length)return 0;
+  const log=getLog(mid,date);
+  return Math.round(h.filter(x=>log[x.id]).length/h.length*100);
+}
+function currentStreak(mid,hid){
+  let s=0;let d=new Date(selDate);
+  while(true){if(!isDone(mid,iso(d),hid))break;s++;d=addDays(d,-1);}
+  return s;
+}
+function bestStreak(mid,hid){
+  let best=0,cur=0;
+  const start=addDays(new Date(),- 365);
+  let d=new Date(start);
+  while(d<=new Date()){if(isDone(mid,iso(d),hid)){cur++;best=Math.max(best,cur);}else cur=0;d=addDays(d,1);}
+  return best;
+}
+
+let state=loadState();
+let selMember=state.members[0]?.id||null;
+let selDate=new Date();
+let activeTab='today';
+let monthFilterHabit='all';
+let heatFilterHabit='all';
+let editMemberId=null;
+let editHabitId=null;
+let confirmCb=null;
+let charts={};
+
+// ---- DOM refs ----
+const dp=document.getElementById('dp');
+const mlist=document.getElementById('mlist');
+const hlistWrap=document.getElementById('hlist-wrap');
+const hcardTitle=document.getElementById('hcard-title');
+
+dp.value=iso(selDate);
+
+// ---- Helper: stat card HTML ----
+function statCard(val,label,color='#f9fafb'){
+  return `<div class="sc"><div class="sv" style="color:${color}">${val}</div><div class="sl">${label}</div></div>`;
+}
+
+// ---- RENDER MEMBERS ----
+function renderMembers(){
+  mlist.innerHTML='';
+  state.members.forEach(m=>{
+    const habits=getMemberHabits(m.id);
+    const pct=completionPct(m.id,iso(selDate));
+    const av=AVATARBG[m.color%AVATARBG.length];
+    const initials=m.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const el=document.createElement('div');
+    el.className='mi'+(selMember===m.id?' active':'');
+    el.innerHTML=`
+      <div class="av" style="background:${av}">${initials}</div>
+      <div class="mn-wrap" style="flex:1;min-width:0">
+        <div class="mn">${m.name}</div>
+        <div class="ms">${habits.length} habit${habits.length!==1?'s':''} &bull; ${pct}% today</div>
+        <div class="prog-wrap"><div class="prog" style="width:${pct}%"></div></div>
+      </div>
+      <div class="ma">
+        <button class="ib" title="Edit" data-mid="${m.id}" data-act="edit">&#9998;</button>
+        <button class="ib" style="color:var(--danger)" title="Delete" data-mid="${m.id}" data-act="del">&#10007;</button>
+      </div>`;
+    el.addEventListener('click',e=>{
+      const b=e.target.closest('[data-act]');
+      if(b){const act=b.dataset.act,mid=b.dataset.mid;
+        if(act==='edit'){editMemberId=mid;document.getElementById('mm-title').textContent='Edit Member';document.getElementById('mm-name').value=state.members.find(x=>x.id===mid).name;showModal('m-member');}
+        else if(act==='del'){confirm(`Delete ${state.members.find(x=>x.id===mid).name} and all their data?`,()=>{state.members=state.members.filter(x=>x.id!==mid);delete state.habits[mid];delete state.logs[mid];if(selMember===mid)selMember=state.members[0]?.id||null;save();render();});}
+        return;
+      }
+      selMember=m.id;render();
+    });
+    mlist.appendChild(el);
+  });
+}
+
+// ---- RENDER HABITS ----
+function renderHabits(){
+  const addBtn=document.getElementById('add-habit-btn');
+  if(!selMember){hlistWrap.innerHTML='<div class="empty-st">&#128100; Select a member</div>';addBtn.disabled=true;return;}
+  addBtn.disabled=false;
+  const m=state.members.find(x=>x.id===selMember);
+  const habits=getMemberHabits(selMember);
+  const dkey=iso(selDate);
+  hcardTitle.childNodes[0].textContent=m?m.name+"'s Habits ":'Habits ';
+  if(!habits.length){hlistWrap.innerHTML='<div class="empty-st">No habits yet. Click + Habit to add.</div>';return;}
+  let html='';
+  habits.forEach(h=>{
+    const done=isDone(selMember,dkey,h.id);
+    const cs=currentStreak(selMember,h.id);
+    const bs=bestStreak(selMember,h.id);
+    html+=`<div class="hr">
+      <div class="hchk${done?' done':''}" data-hid="${h.id}" data-date="${dkey}"></div>
+      <div style="flex:1;min-width:0">
+        <div class="hname">${h.name}</div>
+        <div style="display:flex;gap:6px;margin-top:3px;flex-wrap:wrap">
+          <span class="streak" title="Current streak">${cs > 0 ? '&#128293; '+cs+'d streak':''}</span>
+          ${bs>0?`<span style="font-size:.68rem;color:var(--muted)">best ${bs}d</span>`:''}
+        </div>
+      </div>
+      <div class="ha">
+        <button class="ib" data-hid="${h.id}" data-hact="edit" title="Edit">&#9998;</button>
+        <button class="ib" style="color:var(--danger)" data-hid="${h.id}" data-hact="del" title="Delete">&#10007;</button>
+      </div>
+    </div>`;
+  });
+  hlistWrap.innerHTML=`<div class="habit-list">${html}</div>`;
+  hlistWrap.querySelectorAll('.hchk').forEach(el=>{
+    el.addEventListener('click',()=>{const hid=el.dataset.hid,date=el.dataset.date;setDone(selMember,date,hid,!isDone(selMember,date,hid));});
+  });
+  hlistWrap.querySelectorAll('[data-hact]').forEach(el=>{
+    el.addEventListener('click',e=>{e.stopPropagation();const hid=el.dataset.hid,act=el.dataset.hact;
+      if(act==='edit'){editHabitId=hid;const h=habits.find(x=>x.id===hid);document.getElementById('mh-title').textContent='Edit Habit';document.getElementById('mh-name').value=h.name;showModal('m-habit');}
+      else if(act==='del'){confirm('Delete this habit and its history?',()=>{state.habits[selMember]=habits.filter(x=>x.id!==hid);if(state.logs[selMember])Object.keys(state.logs[selMember]).forEach(d=>{delete state.logs[selMember][d][hid];});save();render();});}
+    });
+  });
+}
+
+// ---- RENDER CHARTS ----
+function destroyChart(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
+
+function renderCharts(){
+  if(!selMember)return;
+  const m=state.members.find(x=>x.id===selMember);
+  if(!m)return;
+  const habits=getMemberHabits(selMember);
+  if(!habits.length){document.getElementById('today-stats').innerHTML='';document.getElementById('week-stats').innerHTML='';document.getElementById('month-stats').innerHTML='';document.getElementById('year-stats').innerHTML='';document.getElementById('heat-stats').innerHTML='';return;}
+  
+  if(activeTab==='today')renderToday();
+  else if(activeTab==='week')renderWeek();
+  else if(activeTab==='month')renderMonth();
+  else if(activeTab==='year')renderYear();
+  else if(activeTab==='heat')renderHeat();
+}
+
+function renderToday(){
+  const habits=getMemberHabits(selMember);
+  const dk=iso(selDate);
+  const log=getLog(selMember,dk);
+  const done=habits.filter(h=>log[h.id]).length;
+  const pct=Math.round(done/habits.length*100);
+  document.getElementById('today-stats').innerHTML=statCard(done+'/'+habits.length,'Completed')+statCard(pct+'%','Overall');
+  
+  destroyChart('donut');
+  const ctx1=document.getElementById('ch-donut').getContext('2d');
+  charts.donut=new Chart(ctx1,{type:'doughnut',data:{labels:habits.map(h=>h.name),datasets:[{data:habits.map(h=>log[h.id]?1:0),backgroundColor:habits.map((h,i)=>COLORS[i%COLORS.length]),borderWidth:1,borderColor:'#111827'}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#e5e7eb',font:{size:10}}},tooltip:{callbacks:{label:c=>habits[c.dataIndex].name+': '+(c.raw===1?'Done':'Not done')}}}}});
+  
+  const days=[];for(let i=13;i>=0;i--)days.push(addDays(selDate,-i));
+  const scores=days.map(d=>completionPct(selMember,iso(d)));
+  destroyChart('trend');
+  const ctx2=document.getElementById('ch-trend').getContext('2d');
+  charts.trend=new Chart(ctx2,{type:'line',data:{labels:days.map(d=>fmtDate(d)),datasets:[{label:'Daily %',data:scores,borderColor:COLORS[0],backgroundColor:'rgba(34,197,94,0.1)',fill:true,tension:.3,pointRadius:3,borderWidth:2}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100,ticks:{stepSize:25,color:'#9ca3af'},grid:{color:'rgba(55,65,81,0.5)'}},x:{ticks:{color:'#9ca3af',maxRotation:0},grid:{display:false}}}}});
+}
+
+function renderWeek(){
+  const habits=getMemberHabits(selMember);
+  const ws=weekStart(selDate);
+  const days=[];for(let i=0;i<7;i++)days.push(addDays(ws,i));
+  const datasets=habits.map((h,i)=>({
+    label:h.name,
+    data:days.map(d=>isDone(selMember,iso(d),h.id)?1:0),
+    backgroundColor:COLORS[i%COLORS.length],
+    borderColor:'#111827',
+    borderWidth:1
+  }));
+  const total=habits.length*7;
+  const done=days.reduce((s,d)=>s+habits.filter(h=>isDone(selMember,iso(d),h.id)).length,0);
+  document.getElementById('week-stats').innerHTML=statCard(done+'/'+total,'Completed this week')+statCard(Math.round(done/total*100)+'%','Overall');
+  
+  destroyChart('week');
+  const ctx=document.getElementById('ch-week').getContext('2d');
+  charts.week=new Chart(ctx,{type:'bar',data:{labels:days.map(d=>fmtDate(d)),datasets},options:{responsive:true,plugins:{legend:{position:'top',labels:{color:'#e5e7eb',font:{size:10}}},tooltip:{mode:'index'}},scales:{x:{stacked:true,ticks:{color:'#9ca3af'},grid:{display:false}},y:{stacked:true,beginAtZero:true,ticks:{stepSize:1,color:'#9ca3af'},grid:{color:'rgba(55,65,81,0.5)'}}}}});
+}
+
+function renderMonth(){
+  const habits=getMemberHabits(selMember);
+  const ms=monthStart(selDate),me=monthEnd(selDate);
+  const days=[];let d=new Date(ms);while(d<=me){days.push(new Date(d));d=addDays(d,1);}
+  
+  const showHabits=monthFilterHabit==='all'?habits:[habits.find(h=>h.id===monthFilterHabit)].filter(Boolean);
+  const dataPerHabit=showHabits.map((h,i)=>({
+    label:h.name,
+    data:days.map(d=>(isDone(selMember,iso(d),h.id)?100/habits.length:0)),
+    borderColor:COLORS[habits.indexOf(h)%COLORS.length],
+    backgroundColor:'rgba(34,197,94,0.08)',
+    tension:.3,
+    pointRadius:2,
+    fill:false,
+    borderWidth:2
+  }));
+  
+  const total=habits.length*days.length;
+  const done=days.reduce((s,d)=>s+habits.filter(h=>isDone(selMember,iso(d),h.id)).length,0);
+  document.getElementById('month-stats').innerHTML=statCard(done+'/'+total,'Completed this month')+statCard(Math.round(done/total*100)+'%','Overall');
+  
+  const filt=document.getElementById('month-filter');
+  let fh='<button class="fc'+( monthFilterHabit==='all'?' on':'')+'" data-fh="all">All habits</button>';
+  habits.forEach((h,i)=>{fh+=`<button class="fc${monthFilterHabit===h.id?' on':''}" data-fh="${h.id}">${h.name}</button>`;});
+  filt.innerHTML=fh;
+  filt.querySelectorAll('.fc').forEach(el=>el.addEventListener('click',()=>{monthFilterHabit=el.dataset.fh;renderCharts();}));
+  
+  destroyChart('month');
+  const ctx=document.getElementById('ch-month').getContext('2d');
+  charts.month=new Chart(ctx,{type:'line',data:{labels:days.map(d=>fmtDate(d)),datasets:dataPerHabit},options:{responsive:true,plugins:{legend:{position:'top',labels:{color:'#e5e7eb',font:{size:10}}}},scales:{y:{beginAtZero:true,max:100,ticks:{stepSize:25,color:'#9ca3af'},grid:{color:'rgba(55,65,81,0.5)'}},x:{ticks:{color:'#9ca3af',maxRotation:45,autoSkip:true,maxTicksLimit:10},grid:{display:false}}}}});
+}
+
+function renderYear(){
+  const habits=getMemberHabits(selMember);
+  const yr=selDate.getFullYear();
+  const months=[];
+  for(let m=0;m<12;m++){
+    const ms=new Date(yr,m,1),me=new Date(yr,m+1,0);
+    const days=[];let d=new Date(ms);while(d<=me&&d<=new Date()){days.push(new Date(d));d=addDays(d,1);}
+    const tot=habits.length*days.length;
+    const dn=days.reduce((s,d)=>s+habits.filter(h=>isDone(selMember,iso(d),h.id)).length,0);
+    months.push({label:new Date(yr,m,1).toLocaleString(undefined,{month:'short'}),pct:tot?Math.round(dn/tot*100):0});
+  }
+  
+  const ytot=months.reduce((s,m)=>s+m.pct,0);
+  const yavg=Math.round(ytot/12);
+  document.getElementById('year-stats').innerHTML=statCard(yavg+'%','Average monthly')+statCard(Math.max(...months.map(m=>m.pct))+'%','Best month');
+  
+  destroyChart('year');
+  const ctx=document.getElementById('ch-year').getContext('2d');
+  charts.year=new Chart(ctx,{type:'line',data:{labels:months.map(m=>m.label),datasets:[{label:'Monthly completion %',data:months.map(m=>m.pct),borderColor:COLORS[0],backgroundColor:'rgba(34,197,94,0.15)',fill:true,tension:.3,pointRadius:4,borderWidth:2.5}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100,ticks:{stepSize:25,color:'#9ca3af'},grid:{color:'rgba(55,65,81,0.5)'}},x:{ticks:{color:'#9ca3af'},grid:{display:false}}}}});
+}
+
+function renderHeat(){
+  const habits=getMemberHabits(selMember);
+  const yr=selDate.getFullYear();
+  const ys=yearStart(selDate);
+  const days=[];let d=new Date(ys);while(d<=new Date()&&d.getFullYear()===yr){days.push(new Date(d));d=addDays(d,1);}
+  
+  const showHabit=heatFilterHabit==='all'?null:habits.find(h=>h.id===heatFilterHabit);
+  const scores=days.map(d=>{
+    if(showHabit)return isDone(selMember,iso(d),showHabit.id)?100:0;
+    return completionPct(selMember,iso(d));
+  });
+  const avg=Math.round(scores.reduce((s,x)=>s+x,0)/scores.length);
+  document.getElementById('heat-stats').innerHTML=statCard(avg+'%','Avg completion YTD')+statCard(scores.filter(s=>s>0).length,'Days active');
+  
+  const filt=document.getElementById('heat-filter');
+  let fh='<button class="fc'+(heatFilterHabit==='all'?' on':'')+'" data-fh="all">All habits</button>';
+  habits.forEach(h=>{fh+=`<button class="fc${heatFilterHabit===h.id?' on':''}" data-fh="${h.id}">${h.name}</button>`;});
+  filt.innerHTML=fh;
+  filt.querySelectorAll('.fc').forEach(el=>el.addEventListener('click',()=>{heatFilterHabit=el.dataset.fh;renderCharts();}));
+  
+  const grid=document.getElementById('heat-grid');
+  const byWeek={};
+  days.forEach((d,i)=>{const wk=Math.floor((d-ys)/(864e5*7));if(!byWeek[wk])byWeek[wk]=[];byWeek[wk].push({d,s:scores[i]});});
+  let html='';
+  Object.keys(byWeek).forEach(wk=>{
+    const week=byWeek[wk];
+    html+='<div class="heat-row">';
+    week.forEach(({d,s})=>{
+      const hue=s===0?'#1e2a1e':s<25?'#166534':s<50?'#16a34a':s<75?'#22c55e':'#86efac';
+      html+=`<div class="hc" style="background:${hue}" title="${fmtDateFull(d)}: ${s}%"></div>`;
+    });
+    html+='</div>';
+  });
+  grid.innerHTML=html;
+  grid.querySelectorAll('.hc').forEach(el=>{el.addEventListener('mouseenter',()=>{document.getElementById('heat-tip').textContent=el.title;});});
+}
+
+// ---- MODALS & UI ----
+function showModal(id){document.getElementById(id).classList.remove('hi');}
+function hideModal(id){document.getElementById(id).classList.add('hi');}
+
+function confirm(msg,cb){confirmCb=cb;document.getElementById('mc-msg').textContent=msg;showModal('m-confirm');}
+
+// ---- RENDER MAIN ----
+function render(){renderMembers();renderHabits();renderCharts();}
+
+// ---- EVENT LISTENERS ----
+dp.addEventListener('change',()=>{selDate=new Date(dp.value);render();});
+
+document.getElementById('add-member-btn').addEventListener('click',()=>{editMemberId=null;document.getElementById('mm-title').textContent='Add Member';document.getElementById('mm-name').value='';showModal('m-member');});
+
+document.getElementById('mm-save').addEventListener('click',()=>{
+  const n=document.getElementById('mm-name').value.trim();if(!n)return;
+  if(editMemberId){const m=state.members.find(x=>x.id===editMemberId);if(m)m.name=n;}
+  else{const id=uid();state.members.push({id,name:n,color:state.members.length%AVATARBG.length});state.habits[id]=[];}
+  save();render();hideModal('m-member');
+});
+document.getElementById('mm-cancel').addEventListener('click',()=>hideModal('m-member'));
+
+document.getElementById('add-habit-btn').addEventListener('click',()=>{if(!selMember)return;editHabitId=null;document.getElementById('mh-title').textContent='Add Habit';document.getElementById('mh-name').value='';showModal('m-habit');});
+
+document.getElementById('mh-save').addEventListener('click',()=>{
+  const n=document.getElementById('mh-name').value.trim();if(!n||!selMember)return;
+  if(editHabitId){const h=state.habits[selMember].find(x=>x.id===editHabitId);if(h)h.name=n;}
+  else{const id=huid();if(!state.habits[selMember])state.habits[selMember]=[];state.habits[selMember].push({id,name:n});}
+  save();render();hideModal('m-habit');
+});
+document.getElementById('mh-cancel').addEventListener('click',()=>hideModal('m-habit'));
+
+document.getElementById('mc-ok').addEventListener('click',()=>{if(confirmCb){confirmCb();confirmCb=null;}hideModal('m-confirm');});
+document.getElementById('mc-cancel').addEventListener('click',()=>{confirmCb=null;hideModal('m-confirm');});
+
+document.getElementById('tabs').addEventListener('click',e=>{
+  const t=e.target.closest('[data-t]');if(!t)return;activeTab=t.dataset.t;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');
+  document.querySelectorAll('[id^=pane-]').forEach(x=>x.classList.add('hi'));
+  document.getElementById('pane-'+activeTab).classList.remove('hi');
+  renderCharts();
+});
+
+document.getElementById('exp-btn').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='habit-tracker-'+Date.now()+'.json';a.click();
+});
+
+document.getElementById('imp-btn').addEventListener('click',()=>document.getElementById('imp-file').click());
+
+document.getElementById('imp-file').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=ev=>{
+    try{const d=JSON.parse(ev.target.result);if(d.members){state=d;save();render();alert('Import successful!');}}catch{alert('Invalid file.');}
+  };r.readAsText(f);e.target.value='';
+});
+
+document.getElementById('resetall-btn').addEventListener('click',()=>{
+  confirm('Delete ALL members, habits, and logs? Cannot be undone.',()=>{state=def();save();selMember=state.members[0]?.id||null;render();});
+});
+
+render();
+</script>
+</body>
+</html>
